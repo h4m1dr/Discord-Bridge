@@ -172,20 +172,29 @@ def check_in():
     print('My public IP address is: {}'.format(ip))
 
 def update_channel_pairs_format(channel_pairs):
+    if not channel_pairs:
+        return {}, False
+
     try:
-        for ch1, (webhook_url, ch2) in channel_pairs.items():
-            channel_pairs[str(ch1)]["webhook_url"]
+        # Check if already in new format
+        first_key = next(iter(channel_pairs))
+        if isinstance(channel_pairs[first_key], dict) and "webhook_url" in channel_pairs[first_key]:
             return channel_pairs, False
     except:
-        print("old dict format detected, converting...")
-        new_channel_pairs = {}
-        for ch1, (webhook_url, ch2) in channel_pairs.items():
+        pass
+
+    print("old dict format detected, converting...")
+    new_channel_pairs = {}
+    for ch1, value in channel_pairs.items():
+        if isinstance(value, (list, tuple)) and len(value) == 2:
+            webhook_url, ch2 = value
             new_channel_pairs[str(ch1)] = {
                 "webhook_url": webhook_url,
                 "paired_id": ch2
             }
         else:
-            return new_channel_pairs, True
+            new_channel_pairs[str(ch1)] = value
+    return new_channel_pairs, True
 
 
 # Event listener for bot ready event
