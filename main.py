@@ -14,6 +14,22 @@ import os
 # ^^^ To prevent conflicts these functions must not run at the same time
 # ^^^ They currently do
 
+# Keep-Alive 
+
+from aiohttp import web
+import asyncio
+
+async def start_keepalive():
+    app = web.Application()
+    async def handle(request):
+        return web.Response(text="Discord Bridge is online")
+    app.router.add_get("/", handle)
+    runner = web.AppRunner(app)
+    await runner.setup()
+    site = web.TCPSite(runner, "0.0.0.0", 10000)
+    await site.start()
+    print("Keep-alive server started on port 10000")
+
 # Todo add custom profile picture command
 # Todo add slash command functionality
 # Todo Profile command that displays real & fake user information
