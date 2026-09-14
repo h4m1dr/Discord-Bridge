@@ -218,6 +218,7 @@ def update_channel_pairs_format(channel_pairs):
 async def on_ready():
     global channel_pairs
     print(f'Logged in as {bot.user.name} ({bot.user.id})')
+    bot.loop.create_task(start_keepalive())
     check_in()
     
     load_data('channel_pairs.json.lzma', 'channel_pairs', {})
