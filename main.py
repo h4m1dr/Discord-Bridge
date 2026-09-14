@@ -28,7 +28,7 @@ import os
 # todo: rewrite channel_pairs for loops to use if `value` in `dict` and directly reference the key value pairs instead of looping through the entire dictionary
 
 # Bot token and prefix
-TOKEN = 'Token_here'
+TOKEN = os.environ.get("TOKEN")
 PREFIX = '^'
 
 # Initialize the bot
